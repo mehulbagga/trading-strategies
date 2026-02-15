@@ -60,12 +60,12 @@ Use on: 3-minute XAUUSD chart
 
 | Metric | Value |
 |--------|-------|
-| Total Trades | - |
-| Win Rate | - |
-| Average Win | - |
-| Average Loss | - |
-| Profit Factor | - |
-| Max Drawdown | - |
+| Total Trades | 11 |
+| Win Rate | 45.45 |
+| Average Win | 26.00 USD |
+| Average Loss | 7.43 USD|
+| Profit Factor | 2.918 |
+| Max Drawdown | 0.23% |
 
 ## 🚀 How to Use
 

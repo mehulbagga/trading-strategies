@@ -62,7 +62,7 @@ trading-strategies/
 ## 📫 Contact
 
 **LinkedIn**: linkedin.com/in/mehulbagga96
-**Email**: mehulbagga96@gmail.com  
+**Email**: mehulbagga96@gmail.com
 **Portfolio**: https://mehulbagga.github.io/trading-strategies/
 
 ---

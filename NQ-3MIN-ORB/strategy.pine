@@ -1,0 +1,152 @@
+//@version=5
+strategy("NQ 3-Min Range Breakout - Fib Entry (IST 20:00)", 
+     overlay=true, 
+     margin_long=100, 
+     margin_short=100,
+     default_qty_type=strategy.fixed,
+     default_qty_value=1)
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  STATE VARIABLES
+// ─────────────────────────────────────────────────────────────────────────────
+var float rangeHigh    = na
+var float rangeLow     = na
+var bool  rangeFormed  = false
+var bool  tradeAllowed = true
+var bool  inBuy        = false
+var bool  inSell       = false
+var float entryPrice   = na
+var float stopPrice    = na
+var float targetPrice  = na
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  TIME CHECK USING CHART'S OWN hour/minute (IST as shown on your chart)
+//  Range window : 20:00 to 20:02 (3 candles: 20:00, 20:01, 20:02)
+//  After range  : 20:03 onwards
+// ─────────────────────────────────────────────────────────────────────────────
+chartHour   = hour(time, "Asia/Kolkata")
+chartMinute = minute(time, "Asia/Kolkata")
+chartDay    = dayofmonth(time, "Asia/Kolkata")
+
+isRangeBar   = (chartHour == 20 and (chartMinute == 0 or chartMinute == 1 or chartMinute == 2))
+isAfterRange = (chartHour == 20 and chartMinute >= 3) or (chartHour > 20)
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  DAILY RESET  (based on IST calendar date)
+// ─────────────────────────────────────────────────────────────────────────────
+if ta.change(chartDay)
+    rangeHigh    := na
+    rangeLow     := na
+    rangeFormed  := false
+    tradeAllowed := true
+    inBuy        := false
+    inSell       := false
+    entryPrice   := na
+    stopPrice    := na
+    targetPrice  := na
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  BUILD THE 3-MINUTE RANGE  (20:00 – 20:02 IST, i.e. 3 x 1-min candles)
+// ─────────────────────────────────────────────────────────────────────────────
+if isRangeBar
+    rangeHigh := na(rangeHigh) ? high : math.max(rangeHigh, high)
+    rangeLow  := na(rangeLow)  ? low  : math.min(rangeLow,  low)
+
+// Mark range as formed on the first bar at or after 20:03 IST
+if not rangeFormed and not na(rangeHigh) and isAfterRange
+    rangeFormed := true
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  ENTRY LOGIC  — first qualifying 1-min candle after range is formed
+// ─────────────────────────────────────────────────────────────────────────────
+if rangeFormed and tradeAllowed and not inBuy and not inSell
+
+    // ── BUY: 1-min candle closed ABOVE range high ─────────────────────────────
+    if close > rangeHigh
+        fibBuy     = high - 0.25 * (high - low)
+        slBuy      = low
+        slRangeBuy = fibBuy - slBuy
+        tpBuy      = fibBuy + 1.5 * slRangeBuy
+
+        entryPrice   := fibBuy
+        stopPrice    := slBuy
+        targetPrice  := tpBuy
+        inBuy        := true
+        tradeAllowed := false
+
+        strategy.entry("BUY", strategy.long,  limit=entryPrice)
+        strategy.exit ("BUY_EXIT", from_entry="BUY", stop=stopPrice, limit=targetPrice)
+
+    // ── SELL: 1-min candle closed BELOW range low ─────────────────────────────
+    else if close < rangeLow
+        fibSell     = low  + 0.25 * (high - low)
+        slSell      = high
+        slRangeSell = slSell - fibSell
+        tpSell      = fibSell - 1.5 * slRangeSell
+
+        entryPrice   := fibSell
+        stopPrice    := slSell
+        targetPrice  := tpSell
+        inSell       := true
+        tradeAllowed := false
+
+        strategy.entry("SELL", strategy.short, limit=entryPrice)
+        strategy.exit ("SELL_EXIT", from_entry="SELL", stop=stopPrice, limit=targetPrice)
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  VISUALS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 1) Yellow background during range-building window
+bgcolor(isRangeBar ? color.new(color.yellow, 85) : na, title="Range Window (20:00-20:03 IST)")
+
+// 2) Range High / Low horizontal lines
+var float plotHigh = na
+var float plotLow  = na
+
+if rangeFormed and na(plotHigh)
+    plotHigh := rangeHigh
+    plotLow  := rangeLow
+
+plot(plotHigh, title="Range High", color=color.yellow, linewidth=1, style=plot.style_linebr)
+plot(plotLow,  title="Range Low",  color=color.yellow, linewidth=1, style=plot.style_linebr)
+
+// 3) Entry / SL / TP labels on trigger bar
+var bool buyLabelDrawn  = false
+var bool sellLabelDrawn = false
+
+if inBuy and not buyLabelDrawn
+    label.new(bar_index, entryPrice,
+         "BUY ENTRY\n" + str.tostring(entryPrice, "#.##"),
+         xloc=xloc.bar_index, yloc=yloc.price,
+         color=color.green, textcolor=color.white,
+         style=label.style_label_right, size=size.small)
+    label.new(bar_index, stopPrice,
+         "SL\n" + str.tostring(stopPrice, "#.##"),
+         xloc=xloc.bar_index, yloc=yloc.price,
+         color=color.red, textcolor=color.white,
+         style=label.style_label_right, size=size.small)
+    label.new(bar_index, targetPrice,
+         "TP\n" + str.tostring(targetPrice, "#.##"),
+         xloc=xloc.bar_index, yloc=yloc.price,
+         color=color.blue, textcolor=color.white,
+         style=label.style_label_right, size=size.small)
+    buyLabelDrawn := true
+
+if inSell and not sellLabelDrawn
+    label.new(bar_index, entryPrice,
+         "SELL ENTRY\n" + str.tostring(entryPrice, "#.##"),
+         xloc=xloc.bar_index, yloc=yloc.price,
+         color=color.orange, textcolor=color.white,
+         style=label.style_label_right, size=size.small)
+    label.new(bar_index, stopPrice,
+         "SL\n" + str.tostring(stopPrice, "#.##"),
+         xloc=xloc.bar_index, yloc=yloc.price,
+         color=color.red, textcolor=color.white,
+         style=label.style_label_right, size=size.small)
+    label.new(bar_index, targetPrice,
+         "TP\n" + str.tostring(targetPrice, "#.##"),
+         xloc=xloc.bar_index, yloc=yloc.price,
+         color=color.blue, textcolor=color.white,
+         style=label.style_label_right, size=size.small)
+    sellLabelDrawn := true

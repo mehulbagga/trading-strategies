@@ -2,14 +2,18 @@
 
 A collection of automated trading strategies with backtesting and risk management implementations.
 
+---
+
 ## 📊 Strategies
 
 ### 1. XAUUSD Opening Range Breakout (ORB)
+
 **Asset**: Gold (XAUUSD)  
 **Timeframe**: 3-minute chart  
-**Strategy Type**: Breakout, Intraday  
+**Strategy Type**: Breakout, Intraday
 
 An automated trading system that captures breakouts from the 15-minute opening range (18:03-18:18 EST). The strategy features:
+
 - ✅ Automated entry on first breakout
 - ✅ 3:1 Risk-Reward ratio
 - ✅ One trade per day maximum
@@ -22,21 +26,46 @@ An automated trading system that captures breakouts from the 15-minute opening r
 
 ---
 
+### 2. NQ E-mini Futures — 3-Minute Opening Range Breakout (Fib Entry)
+
+**Asset**: NASDAQ 100 E-mini Futures (NQ1!)  
+**Timeframe**: 1-minute chart  
+**Strategy Type**: Breakout, Intraday
+
+An automated trading system that captures the first directional breakout after the NASDAQ open using a Fibonacci pullback entry for better fill prices. The strategy features:
+
+- ✅ 3-minute opening range (20:00–20:03 IST / 09:30–09:33 AM NY)
+- ✅ 0.25 Fib pullback limit entry on breakout candle
+- ✅ 1.5R fixed Risk-Reward target
+- ✅ One trade per day maximum
+- ✅ Hard stop at trigger candle extreme
+- ✅ Visual range, entry, SL & TP indicators
+
+**Platform**: TradingView (Pine Script v5)
+
+[View Strategy Details →](./NQ-3MIN-ORB/)
+
+---
+
 ## 🛠️ Technologies Used
 
-- **Pine Script** - TradingView strategy development
-- **MQL5** - MetaTrader 5 Expert Advisor development
-- **Algorithmic Trading** - Automated execution systems
-- **Technical Analysis** - Price action and breakout strategies
-- **Risk Management** - Position sizing and stop-loss automation
+- **Pine Script** — TradingView strategy development
+- **MQL5** — MetaTrader 5 Expert Advisor development
+- **Algorithmic Trading** — Automated execution systems
+- **Technical Analysis** — Price action and breakout strategies
+- **Risk Management** — Position sizing and stop-loss automation
+
+---
 
 ## 📈 Strategy Development Process
 
-1. **Research** - Market analysis and pattern identification
-2. **Design** - Entry/exit logic and risk parameters
-3. **Implementation** - Code development in Pine Script and MQL5
-4. **Backtesting** - Historical performance validation
-5. **Optimization** - Parameter tuning and refinement
+1. **Research** — Market analysis and pattern identification
+2. **Design** — Entry/exit logic and risk parameters
+3. **Implementation** — Code development in Pine Script and MQL5
+4. **Backtesting** — Historical performance validation
+5. **Optimization** — Parameter tuning and refinement
+
+---
 
 ## 📁 Repository Structure
 
@@ -48,21 +77,28 @@ trading-strategies/
 │   ├── strategy.pine
 │   ├── XAUUSD_ORB.mq5
 │   └── screenshots/
-└── [Future strategies...]
+└── NQ-3MIN-ORB/
+    ├── README.md
+    ├── strategy.pine
+    └── screenshots/
 ```
+
+---
 
 ## 🎯 Future Developments
 
-- [ ] Mean reversion strategies
-- [ ] Multi-timeframe analysis
-- [ ] Machine learning integration
-- [ ] Portfolio optimization
-- [ ] Live trading performance tracking
+- Mean reversion strategies
+- Multi-timeframe analysis
+- Machine learning integration
+- Portfolio optimization
+- Live trading performance tracking
+
+---
 
 ## 📫 Contact
 
-**LinkedIn**: linkedin.com/in/mehulbagga96
-**Email**: mehulbagga96@gmail.com
+**LinkedIn**: linkedin.com/in/mehulbagga96  
+**Email**: mehulbagga96@gmail.com  
 **Portfolio**: https://mehulbagga.github.io/trading-strategies/
 
 ---
@@ -73,8 +109,8 @@ These strategies are for educational and research purposes only. Past performanc
 
 ## 📝 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [MIT License](./LICENSE).
 
 ---
 
-*Last Updated: February 2025*
+*Last Updated: February 2026*

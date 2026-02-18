@@ -22,17 +22,9 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--sans);
-            overflow-x: hidden;
-        }
-
-        /* ── GRID BACKGROUND ── */
         body::before {
             content: '';
             position: fixed;
@@ -45,244 +37,73 @@
             z-index: 0;
         }
 
-        /* ── TICKER BAR ── */
-        .ticker-bar {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 8px 0;
-            overflow: hidden;
-            position: relative;
-            z-index: 10;
-        }
-        .ticker-track {
-            display: flex;
-            gap: 48px;
-            animation: ticker 30s linear infinite;
-            white-space: nowrap;
-        }
-        .ticker-item {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .ticker-item .symbol { color: var(--text); font-weight: 700; }
-        .ticker-item .up { color: var(--accent); }
-        .ticker-item .down { color: var(--accent-red); }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        /* ── TICKER ── */
+        .ticker-bar { position: relative; z-index: 10; }
 
         /* ── NAV ── */
         nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: sticky; top: 0; z-index: 100;
             background: rgba(8,12,16,0.9);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 0 48px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between;
             height: 60px;
         }
-        .nav-logo {
-            font-family: var(--mono);
-            font-size: 13px;
-            color: var(--accent);
-            letter-spacing: 2px;
-        }
+        .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 2px; }
         .nav-links { display: flex; gap: 32px; align-items: center; }
         .nav-links a {
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: color 0.2s;
+            color: var(--muted); text-decoration: none; font-size: 13px;
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s;
         }
         .nav-links a:hover { color: var(--accent); }
-        .nav-cta {
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent) !important;
-            padding: 6px 16px;
-            border-radius: 4px;
-            transition: all 0.2s !important;
-        }
+        .nav-cta { background: transparent !important; border: 1px solid var(--accent); color: var(--accent) !important; padding: 6px 16px; border-radius: 4px; transition: all 0.2s !important; }
         .nav-cta:hover { background: var(--accent) !important; color: var(--bg) !important; }
 
         /* ── HERO ── */
-        .hero {
-            position: relative;
-            z-index: 1;
-            padding: 120px 48px 80px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+        .hero { position: relative; z-index: 1; padding: 120px 48px 80px; max-width: 1100px; margin: 0 auto; }
         .hero-tag {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--accent);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            font-family: var(--mono); font-size: 11px; color: var(--accent);
+            letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px;
+            display: flex; align-items: center; gap: 12px;
         }
-        .hero-tag::before {
-            content: '';
-            width: 32px;
-            height: 1px;
-            background: var(--accent);
-        }
-        .hero h1 {
-            font-size: clamp(2.8rem, 6vw, 5rem);
-            font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: -2px;
-            margin-bottom: 24px;
-        }
-        .hero h1 em {
-            font-style: normal;
-            color: transparent;
-            -webkit-text-stroke: 1px var(--accent);
-        }
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--muted);
-            max-width: 560px;
-            line-height: 1.8;
-            margin-bottom: 40px;
-        }
-        .hero-stats {
-            display: flex;
-            gap: 48px;
-            flex-wrap: wrap;
-        }
+        .hero-tag::before { content: ''; width: 32px; height: 1px; background: var(--accent); }
+        .hero h1 { font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 24px; }
+        .hero h1 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--accent); }
+        .hero p { font-size: 1.1rem; color: var(--muted); max-width: 560px; line-height: 1.8; margin-bottom: 40px; }
+        .hero-stats { display: flex; gap: 48px; flex-wrap: wrap; }
         .stat { border-left: 2px solid var(--accent); padding-left: 16px; }
-        .stat-num {
-            font-family: var(--mono);
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text);
-            line-height: 1;
-        }
-        .stat-label {
-            font-size: 12px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
+        .stat-num { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--text); line-height: 1; }
+        .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
         /* ── SECTION ── */
-        .section {
-            position: relative;
-            z-index: 1;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 48px 80px;
-        }
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 40px;
-        }
-        .section-header h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-        .section-header .line {
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-        .section-tag {
-            font-family: var(--mono);
-            font-size: 10px;
-            color: var(--muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+        .section { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 48px 80px; }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+        .section-header h2 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
+        .section-header .line { flex: 1; height: 1px; background: var(--border); }
+        .section-tag { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
 
         /* ── STRATEGY CARDS ── */
-        .strategies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
-            gap: 24px;
-        }
+        .strategies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); gap: 24px; }
         .strategy-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s, border-color 0.3s;
-            position: relative;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s; position: relative;
         }
-        .strategy-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-        }
-        .strategy-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-        }
+        .strategy-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .strategy-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .card-gold::before { background: linear-gradient(90deg, var(--accent-gold), #ff9f43); }
         .card-blue::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-        .card-coming::before { background: linear-gradient(90deg, var(--muted), var(--border)); }
 
-        .card-header {
-            padding: 28px 28px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            margin-bottom: 14px;
-        }
+        .card-header { padding: 28px 28px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 14px; }
         .icon-gold { background: rgba(240,180,41,0.1); border: 1px solid rgba(240,180,41,0.2); }
         .icon-blue { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.2); }
-        .card-num {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--muted);
-            border: 1px solid var(--border);
-            padding: 4px 10px;
-            border-radius: 4px;
-        }
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            letter-spacing: -0.3px;
-        }
+        .card-num { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 4px; }
+        .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
         .card-subtitle { font-size: 13px; color: var(--muted); }
         .card-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-        .tag {
-            font-family: var(--mono);
-            font-size: 10px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
+        .tag { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
         .tag-green { background: rgba(0,212,170,0.1); color: var(--accent); border: 1px solid rgba(0,212,170,0.2); }
         .tag-gold { background: rgba(240,180,41,0.1); color: var(--accent-gold); border: 1px solid rgba(240,180,41,0.2); }
         .tag-blue { background: rgba(0,153,255,0.1); color: var(--accent2); border: 1px solid rgba(0,153,255,0.2); }
@@ -290,160 +111,57 @@
 
         .card-body { padding: 24px 28px; }
         .card-body p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
-
-        .card-metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .metric {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-        }
-        .metric-val {
-            font-family: var(--mono);
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-        }
+        .card-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .metric { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+        .metric-val { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--text); }
         .metric-key { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
 
         .card-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
-        .card-features li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: var(--muted);
-        }
-        .card-features li::before {
-            content: '✓';
-            color: var(--accent);
-            font-family: var(--mono);
-            font-size: 11px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
+        .card-features li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+        .card-features li::before { content: '✓'; color: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 700; flex-shrink: 0; }
 
-        .card-footer {
-            padding: 16px 28px;
-            background: var(--surface2);
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .platform {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--muted);
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
-            border-radius: 6px;
-            font-family: var(--sans);
-            font-size: 13px;
-            font-weight: 700;
-            text-decoration: none;
-            letter-spacing: 0.3px;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: var(--bg);
-        }
+        .card-footer { padding: 16px 28px; background: var(--surface2); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .platform { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; border-radius: 6px; font-family: var(--sans); font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.3px; transition: all 0.2s; cursor: pointer; border: none; }
+        .btn-primary { background: var(--accent); color: var(--bg); }
         .btn-primary:hover { background: #00f0c0; transform: translateX(2px); }
-        .btn-gold {
-            background: var(--accent-gold);
-            color: var(--bg);
-        }
+        .btn-gold { background: var(--accent-gold); color: var(--bg); }
         .btn-gold:hover { background: #ffc94d; transform: translateX(2px); }
-        .btn-outline {
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--border);
-        }
+        .btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
         .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
-        /* ── COMING SOON CARD ── */
+        /* ── COMING SOON ── */
         .coming-card {
-            background: var(--surface);
-            border: 1px dashed var(--border);
-            border-radius: 12px;
-            padding: 48px 28px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            min-height: 300px;
+            background: var(--surface); border: 1px dashed var(--border); border-radius: 12px;
+            padding: 48px 28px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center; min-height: 300px;
         }
         .coming-icon { font-size: 36px; margin-bottom: 16px; opacity: 0.4; }
-        .coming-title { font-size: 1rem; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+        .coming-title { font-size: 1rem; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
         .coming-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
         .coming-list li { font-size: 13px; color: var(--border); font-family: var(--mono); }
         .coming-list li::before { content: '— '; }
 
-        /* ── ABOUT STRIP ── */
-        .about-strip {
-            position: relative;
-            z-index: 1;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            padding: 64px 48px;
-            margin-bottom: 80px;
-        }
-        .about-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
+        /* ── ABOUT ── */
+        .about-strip { position: relative; z-index: 1; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 64px 48px; margin-bottom: 80px; }
+        .about-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
         .about-inner h2 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
         .about-inner p { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 24px; }
         .contact-links { display: flex; gap: 12px; flex-wrap: wrap; }
         .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .tech-item {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 14px 16px;
-            font-family: var(--mono);
-            font-size: 12px;
-            color: var(--muted);
-        }
+        .tech-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
         .tech-item strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 2px; }
 
         /* ── FOOTER ── */
-        footer {
-            position: relative;
-            z-index: 1;
-            padding: 24px 48px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
+        footer { position: relative; z-index: 1; padding: 24px 48px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
         footer a { color: var(--accent); text-decoration: none; }
 
-        /* ── ANIMATIONS ── */
-        .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-        .fade-in.visible { opacity: 1; transform: none; }
+        /* ── ANIMATIONS — visible by default, JS enhances ── */
+        .fade-in { opacity: 1; transform: none; transition: opacity 0.6s ease, transform 0.6s ease; }
+        .js-ready .fade-in { opacity: 0; transform: translateY(24px); }
+        .js-ready .fade-in.visible { opacity: 1; transform: none; }
 
         @media (max-width: 768px) {
             nav { padding: 0 20px; }
@@ -453,29 +171,35 @@
             .about-inner { grid-template-columns: 1fr; gap: 40px; }
             .about-strip { padding: 48px 20px; }
             footer { padding: 20px; }
-            .hero h1 { letter-spacing: -1px; }
             .hero-stats { gap: 24px; }
         }
     </style>
 </head>
 <body>
 
-<!-- TICKER BAR -->
+<!-- LIVE TICKER — TradingView Widget -->
 <div class="ticker-bar">
-    <div class="ticker-track">
-        <span class="ticker-item"><span class="symbol">NQ1!</span> 24,938.75 <span class="up">▲ 0.68%</span></span>
-        <span class="ticker-item"><span class="symbol">XAUUSD</span> 2,924.80 <span class="up">▲ 0.42%</span></span>
-        <span class="ticker-item"><span class="symbol">ES1!</span> 5,681.25 <span class="up">▲ 0.31%</span></span>
-        <span class="ticker-item"><span class="symbol">CL1!</span> 72.14 <span class="down">▼ 0.18%</span></span>
-        <span class="ticker-item"><span class="symbol">EURUSD</span> 1.0492 <span class="down">▼ 0.09%</span></span>
-        <span class="ticker-item"><span class="symbol">BTCUSD</span> 97,420 <span class="up">▲ 1.24%</span></span>
-        <!-- Duplicate for seamless loop -->
-        <span class="ticker-item"><span class="symbol">NQ1!</span> 24,938.75 <span class="up">▲ 0.68%</span></span>
-        <span class="ticker-item"><span class="symbol">XAUUSD</span> 2,924.80 <span class="up">▲ 0.42%</span></span>
-        <span class="ticker-item"><span class="symbol">ES1!</span> 5,681.25 <span class="up">▲ 0.31%</span></span>
-        <span class="ticker-item"><span class="symbol">CL1!</span> 72.14 <span class="down">▼ 0.18%</span></span>
-        <span class="ticker-item"><span class="symbol">EURUSD</span> 1.0492 <span class="down">▼ 0.09%</span></span>
-        <span class="ticker-item"><span class="symbol">BTCUSD</span> 97,420 <span class="up">▲ 1.24%</span></span>
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {
+            "symbols": [
+                { "proName": "CME_MINI:NQ1!", "title": "NQ Futures" },
+                { "proName": "OANDA:XAUUSD",  "title": "Gold" },
+                { "proName": "CME_MINI:ES1!",  "title": "ES Futures" },
+                { "proName": "OANDA:EURUSD",   "title": "EUR/USD" },
+                { "proName": "OANDA:GBPUSD",   "title": "GBP/USD" },
+                { "proName": "BITSTAMP:BTCUSD","title": "Bitcoin" },
+                { "proName": "BITSTAMP:ETHUSD","title": "Ethereum" },
+                { "proName": "NYMEX:CL1!",     "title": "Crude Oil" }
+            ],
+            "showSymbolLogo": false,
+            "isTransparent": true,
+            "displayMode": "adaptive",
+            "colorTheme": "dark",
+            "locale": "en"
+        }
+        </script>
     </div>
 </div>
 
@@ -496,18 +220,9 @@
     <h1>Systematic<br>Strategies for<br><em>Modern Markets</em></h1>
     <p>Automated intraday trading systems built on price action, breakout mechanics, and disciplined risk management — backtested and deployed on TradingView.</p>
     <div class="hero-stats">
-        <div class="stat">
-            <div class="stat-num">2</div>
-            <div class="stat-label">Live Strategies</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num">1:1.5+</div>
-            <div class="stat-label">Risk-Reward</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num">1/day</div>
-            <div class="stat-label">Max Trades</div>
-        </div>
+        <div class="stat"><div class="stat-num">2</div><div class="stat-label">Live Strategies</div></div>
+        <div class="stat"><div class="stat-num">1:1.5+</div><div class="stat-label">Risk-Reward</div></div>
+        <div class="stat"><div class="stat-num">1/day</div><div class="stat-label">Max Trades</div></div>
     </div>
 </div>
 
@@ -599,7 +314,7 @@
         <div class="coming-card fade-in">
             <div class="coming-icon">🔬</div>
             <div class="coming-title">More Strategies in Development</div>
-            <ul class="coming-list" style="margin-top:12px;">
+            <ul class="coming-list">
                 <li>Mean Reversion Systems</li>
                 <li>Multi-Timeframe Analysis</li>
                 <li>Trend Following Models</li>
@@ -636,12 +351,13 @@
 
 <!-- FOOTER -->
 <footer>
-    <p>© 2026 Mehul Bagga · <a href="mailto:mehulbagga96@gmail.com">mehulbagga96@gmail.com</a></p>
-    <p>For educational purposes only · <a href="https://github.com/mehulbagga/trading-strategies/blob/main/LICENSE" target="_blank">MIT License</a></p>
+    <p>&#169; 2026 Mehul Bagga &middot; <a href="mailto:mehulbagga96@gmail.com">mehulbagga96@gmail.com</a></p>
+    <p>For educational purposes only &middot; <a href="https://github.com/mehulbagga/trading-strategies/blob/main/LICENSE" target="_blank">MIT License</a></p>
 </footer>
 
 <script>
-    // Fade-in on scroll
+    // Activate animations only when JS is ready — content always visible without JS
+    document.documentElement.classList.add('js-ready');
     const observer = new IntersectionObserver(entries => {
         entries.forEach((e, i) => {
             if (e.isIntersecting) {
@@ -649,7 +365,7 @@
                 observer.unobserve(e.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 

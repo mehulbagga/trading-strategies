@@ -1,347 +1,607 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithmic Trading Portfolio | Mehul Bagga</title>
+    <title>XAUUSD ORB Strategy | Mehul Bagga</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #080c10;
+            --surface: #0e1419;
+            --surface2: #151c24;
+            --border: #1e2d3d;
+            --accent: #f0b429;
+            --accent-light: #ffc94d;
+            --accent-green: #00d4aa;
+            --accent-red: #ff4d6d;
+            --accent-blue: #0099ff;
+            --text: #e2eaf4;
+            --muted: #4a6278;
+            --mono: 'Space Mono', monospace;
+            --sans: 'Syne', sans-serif;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(240,180,41,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(240,180,41,0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 60px 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 3em;
-            color: #2d3748;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.3em;
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-
-        .intro {
-            font-size: 1.1em;
-            color: #4a5568;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-
-        .social-links {
-            margin-top: 30px;
-        }
-
-        .social-links a {
-            display: inline-block;
-            margin: 0 15px;
-            padding: 12px 30px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .social-links a:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-        }
-
-        .project-header {
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(8,12,16,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 48px;
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            height: 60px;
         }
-
-        .project-icon {
-            font-size: 2.5em;
-            margin-right: 15px;
-        }
-
-        .project-card h2 {
-            color: #2d3748;
-            font-size: 1.5em;
-        }
-
-        .project-meta {
+        .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 2px; }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-back {
             display: flex;
-            gap: 10px;
-            margin: 15px 0;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted) !important;
+            font-family: var(--mono);
+            font-size: 12px;
         }
+        .nav-back:hover { color: var(--accent) !important; }
 
-        .badge {
-            background: #667eea;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-
-        .badge.timeframe {
-            background: #48bb78;
-        }
-
-        .badge.risk {
-            background: #ed8936;
-        }
-
-        .project-card p {
-            color: #4a5568;
-            margin: 15px 0;
-            line-height: 1.7;
-        }
-
-        .features {
-            list-style: none;
-            margin: 20px 0;
-        }
-
-        .features li {
-            padding: 8px 0;
-            padding-left: 25px;
+        /* ── HERO ── */
+        .hero {
             position: relative;
-            color: #4a5568;
+            z-index: 1;
+            padding: 80px 48px 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .breadcrumb {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--accent); }
+        .breadcrumb span { color: var(--border); }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(240,180,41,0.1);
+            border: 1px solid rgba(240,180,41,0.25);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .hero-badge::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+        }
+        .hero h1 em { font-style: normal; color: var(--accent); }
+        .hero-sub { font-size: 1rem; color: var(--muted); max-width: 540px; line-height: 1.8; margin-bottom: 36px; }
+
+        .hero-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+        .meta-chip {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+        .meta-chip.gold { border-color: rgba(240,180,41,0.3); color: var(--accent); background: rgba(240,180,41,0.06); }
+        .meta-chip.green { border-color: rgba(0,212,170,0.3); color: var(--accent-green); background: rgba(0,212,170,0.06); }
+
+        /* ── STATS ROW ── */
+        .stats-row {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto 0;
+            padding: 0 48px 60px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .stat-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+        .stat-box-val { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--text); }
+        .stat-box-key { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 48px 80px;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 32px;
+            align-items: start;
         }
 
-        .features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #48bb78;
-            font-weight: bold;
+        /* ── SECTIONS ── */
+        .block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
         }
+        .block-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .block-header h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .block-icon { font-size: 16px; }
+        .block-body { padding: 24px; }
+
+        /* Timing table */
+        .timing-table { width: 100%; border-collapse: collapse; }
+        .timing-table th {
+            text-align: left;
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
+        }
+        .timing-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid var(--border); }
+        .timing-table tr:last-child td { border-bottom: none; }
+        .timing-table td:first-child { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+        .timing-table td strong { color: var(--accent); }
+
+        /* Rules */
+        .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .rule-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+        .rule-box.buy { border-top: 2px solid var(--accent-green); }
+        .rule-box.sell { border-top: 2px solid var(--accent-red); }
+        .rule-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+        .rule-label.buy { color: var(--accent-green); }
+        .rule-label.sell { color: var(--accent-red); }
+        .rule-row { margin-bottom: 8px; }
+        .rule-key { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .rule-val { font-size: 13px; color: var(--text); font-family: var(--mono); }
+
+        /* Features list */
+        .features-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--muted);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .features-list li:last-child { border-bottom: none; padding-bottom: 0; }
+        .features-list li .check { color: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+        .features-list li span strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 2px; }
+
+        /* Code block */
+        .code-wrap { background: var(--surface2); border-radius: 8px; overflow: hidden; }
+        .code-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+        .code-top span { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+        .code-top a { font-size: 12px; color: var(--accent); text-decoration: none; font-family: var(--mono); }
+        .code-top a:hover { text-decoration: underline; }
+        pre { padding: 20px; font-size: 12px; line-height: 1.7; color: #8b9eb0; overflow-x: auto; max-height: 320px; overflow-y: auto; }
+        pre .c { color: var(--muted); }
+        pre .kw { color: #c678dd; }
+        pre .str { color: #98c379; }
+        pre .num { color: var(--accent); }
+        pre .fn { color: var(--accent-blue); }
+
+        /* ── SIDEBAR ── */
+        .sidebar { position: sticky; top: 80px; }
+        .sidebar-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .sidebar-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            font-family: var(--mono);
+        }
+        .sidebar-body { padding: 20px; }
+        .sidebar-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .sidebar-row:last-child { border-bottom: none; }
+        .sidebar-row .key { color: var(--muted); }
+        .sidebar-row .val { font-family: var(--mono); color: var(--text); font-size: 12px; }
+        .sidebar-row .val.gold { color: var(--accent); }
+        .sidebar-row .val.green { color: var(--accent-green); }
 
         .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #667eea;
-            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-family: var(--sans);
+            font-size: 13px;
+            font-weight: 700;
             text-decoration: none;
-            border-radius: 25px;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .btn:hover {
-            background: #5a67d8;
-            transform: translateX(5px);
-        }
-
-        .skills {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-top: 40px;
-        }
-
-        .skills h2 {
-            text-align: center;
-            color: #2d3748;
-            margin-bottom: 30px;
-            font-size: 2em;
-        }
-
-        .skill-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .skill-item {
-            text-align: center;
-            padding: 20px;
-            background: #f7fafc;
-            border-radius: 10px;
-            transition: all 0.3s;
-        }
-
-        .skill-item:hover {
-            background: #edf2f7;
-            transform: scale(1.05);
-        }
-
-        .skill-item h3 {
-            color: #667eea;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
             margin-bottom: 10px;
         }
+        .btn-gold { background: var(--accent); color: var(--bg); }
+        .btn-gold:hover { background: var(--accent-light); }
+        .btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: white;
-            margin-top: 60px;
+        .disclaimer {
+            background: rgba(240,180,41,0.05);
+            border: 1px solid rgba(240,180,41,0.15);
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
         }
+        .disclaimer strong { color: var(--accent); }
+
+        /* ── FOOTER ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 20px 48px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Animations */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .fade-in.visible { opacity: 1; transform: none; }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-
-            .projects {
-                grid-template-columns: 1fr;
-            }
-
-            .social-links a {
-                display: block;
-                margin: 10px 0;
-            }
+            nav { padding: 0 20px; }
+            .hero { padding: 60px 20px 40px; }
+            .stats-row { grid-template-columns: 1fr 1fr; padding: 0 20px 40px; }
+            .content { grid-template-columns: 1fr; padding: 0 20px 60px; }
+            .sidebar { position: static; }
+            .rules-grid { grid-template-columns: 1fr; }
+            footer { padding: 20px; }
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <h1>Algorithmic Trading Portfolio</h1>
-            <p class="subtitle">Quantitative Strategies & Automated Trading Systems</p>
-            <p class="intro">
-                Welcome to my algorithmic trading portfolio. I develop and backtest automated trading strategies
-                using technical analysis, risk management principles, and systematic approaches to financial markets.
-            </p>
-            <div class="social-links">
-                <a href="https://github.com/mehulbagga/trading-strategies" target="_blank">📂 GitHub</a>
-                <a href="https://linkedin.com/in/mehulbagga96" target="_blank">💼 LinkedIn</a>
-                <a href="mailto:mehulbagga96@gmail.com">✉️ Contact</a>
-            </div>
-        </header>
 
-        <div class="projects">
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon">📊</div>
-                    <h2>XAUUSD Opening Range Breakout</h2>
-                </div>
-                <div class="project-meta">
-                    <span class="badge">Breakout</span>
-                    <span class="badge timeframe">3-min</span>
-                    <span class="badge risk">R:R 3:1</span>
-                </div>
-                <p>
-                    An automated intraday trading system for Gold (XAUUSD) that captures breakouts from the
-                    15-minute opening range (18:03-18:18 EST).
-                </p>
-                <ul class="features">
-                    <li>Automated entry on first breakout</li>
-                    <li>Dynamic stop-loss placement</li>
-                    <li>3:1 Risk-Reward ratio</li>
-                    <li>One trade per day maximum</li>
-                    <li>Available in Pine Script & MQL5</li>
-                </ul>
-                <a href="https://github.com/mehulbagga/trading-strategies/tree/main/XAUUSD-ORB" class="btn"
-                    target="_blank">View Code →</a>
-            </div>
-
-            <!-- Add more project cards here as you develop more strategies -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon">🚀</div>
-                    <h2>More Strategies Coming Soon</h2>
-                </div>
-                <p>
-                    Currently researching and developing additional algorithmic trading strategies including
-                    mean reversion, trend following, and multi-timeframe analysis systems.
-                </p>
-                <ul class="features">
-                    <li>Mean reversion strategies</li>
-                    <li>Trend following systems</li>
-                    <li>Multi-timeframe analysis</li>
-                    <li>Portfolio optimization</li>
-                    <li>Machine learning integration</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="skills">
-            <h2>Technical Skills</h2>
-            <div class="skill-grid">
-                <div class="skill-item">
-                    <h3>Programming</h3>
-                    <p>Pine Script<br>MQL5</p>
-                </div>
-                <div class="skill-item">
-                    <h3>Platforms</h3>
-                    <p>TradingView<br>MetaTrader 5</p>
-                </div>
-                <div class="skill-item">
-                    <h3>Analysis</h3>
-                    <p>Technical Analysis<br>Price Action</p>
-                </div>
-                <div class="skill-item">
-                    <h3>Trading</h3>
-                    <p>Risk Management<br>Position Sizing</p>
-                </div>
-                <div class="skill-item">
-                    <h3>Development</h3>
-                    <p>Algorithmic Trading<br>Backtesting</p>
-                </div>
-                <div class="skill-item">
-                    <h3>Markets</h3>
-                    <p>Forex<br>Commodities</p>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            <p>&copy; 2025 Mehul Bagga | Algorithmic Trading Portfolio</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">
-                ⚠️ Educational purposes only. Past performance does not guarantee future results.
-            </p>
-        </footer>
+<!-- NAV -->
+<nav>
+    <div class="nav-logo">MB // ALGO</div>
+    <div class="nav-links">
+        <a href="../" class="nav-back">← Portfolio</a>
+        <a href="https://github.com/mehulbagga/trading-strategies/tree/main/XAUUSD-ORB" target="_blank">GitHub</a>
+        <a href="mailto:mehulbagga96@gmail.com">Contact</a>
     </div>
-</body>
+</nav>
 
+<!-- HERO -->
+<div class="hero fade-in">
+    <div class="breadcrumb">
+        <a href="../">Portfolio</a>
+        <span>/</span>
+        <span>XAUUSD-ORB</span>
+    </div>
+    <div class="hero-badge">Strategy #01 · Live</div>
+    <h1>XAUUSD<br><em>Opening Range</em><br>Breakout</h1>
+    <p class="hero-sub">An automated intraday system capturing breakouts from the 15-minute Gold opening range. Systematic entry, dynamic stops, fixed 3:1 reward-to-risk.</p>
+    <div class="hero-meta">
+        <span class="meta-chip gold">Gold (XAUUSD)</span>
+        <span class="meta-chip green">3-Min Chart</span>
+        <span class="meta-chip">Pine Script v5</span>
+        <span class="meta-chip">MQL5</span>
+        <span class="meta-chip">Breakout</span>
+    </div>
+</div>
+
+<!-- STATS ROW -->
+<div class="stats-row fade-in">
+    <div class="stat-box">
+        <div class="stat-box-val">3:1</div>
+        <div class="stat-box-key">Risk-Reward</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-box-val">3m</div>
+        <div class="stat-box-key">Chart Timeframe</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-box-val">15min</div>
+        <div class="stat-box-key">Opening Range</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-box-val">1/day</div>
+        <div class="stat-box-key">Max Trades</div>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+    <div class="main">
+
+        <!-- Timing -->
+        <div class="block fade-in">
+            <div class="block-header">
+                <span class="block-icon">⏰</span>
+                <h2>Session Timing</h2>
+            </div>
+            <div class="block-body">
+                <table class="timing-table">
+                    <tr><th>Timezone</th><th>Range Window</th><th>Entry From</th><th>Session</th></tr>
+                    <tr>
+                        <td>🇮🇳 IST (UTC+5:30)</td>
+                        <td><strong>23:33 – 23:48</strong></td>
+                        <td>23:48 onwards</td>
+                        <td>EST Winter</td>
+                    </tr>
+                    <tr>
+                        <td>🇺🇸 New York (EST)</td>
+                        <td><strong>18:03 – 18:18</strong></td>
+                        <td>18:18 AM onwards</td>
+                        <td>EST Winter</td>
+                    </tr>
+                    <tr>
+                        <td>🌐 UTC</td>
+                        <td><strong>23:03 – 23:18</strong></td>
+                        <td>23:18 onwards</td>
+                        <td>Reference</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Entry Rules -->
+        <div class="block fade-in">
+            <div class="block-header">
+                <span class="block-icon">📐</span>
+                <h2>Entry &amp; Exit Rules</h2>
+            </div>
+            <div class="block-body">
+                <div class="rules-grid">
+                    <div class="rule-box buy">
+                        <div class="rule-label buy">▲ BUY Setup</div>
+                        <div class="rule-row">
+                            <div class="rule-key">Condition</div>
+                            <div class="rule-val">Close above range high</div>
+                        </div>
+                        <div class="rule-row" style="margin-top:10px;">
+                            <div class="rule-key">Entry</div>
+                            <div class="rule-val">Market / first breakout bar</div>
+                        </div>
+                        <div class="rule-row" style="margin-top:10px;">
+                            <div class="rule-key">Stop Loss</div>
+                            <div class="rule-val">Below range low</div>
+                        </div>
+                        <div class="rule-row" style="margin-top:10px;">
+                            <div class="rule-key">Target</div>
+                            <div class="rule-val">Entry + 3× SL distance</div>
+                        </div>
+                    </div>
+                    <div class="rule-box sell">
+                        <div class="rule-label sell">▼ SELL Setup</div>
+                        <div class="rule-row">
+                            <div class="rule-key">Condition</div>
+                            <div class="rule-val">Close below range low</div>
+                        </div>
+                        <div class="rule-row" style="margin-top:10px;">
+                            <div class="rule-key">Entry</div>
+                            <div class="rule-val">Market / first breakout bar</div>
+                        </div>
+                        <div class="rule-row" style="margin-top:10px;">
+                            <div class="rule-key">Stop Loss</div>
+                            <div class="rule-val">Above range high</div>
+                        </div>
+                        <div class="rule-row" style="margin-top:10px;">
+                            <div class="rule-key">Target</div>
+                            <div class="rule-val">Entry − 3× SL distance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="block fade-in">
+            <div class="block-header">
+                <span class="block-icon">🔒</span>
+                <h2>Strategy Features</h2>
+            </div>
+            <div class="block-body">
+                <ul class="features-list">
+                    <li><span class="check">✓</span><span><strong>Automated Entry on First Breakout</strong>No manual intervention — the script fires on the first confirmed close outside the range</span></li>
+                    <li><span class="check">✓</span><span><strong>Dynamic Stop-Loss Placement</strong>Stop is placed at the opposite side of the 15-minute opening range</span></li>
+                    <li><span class="check">✓</span><span><strong>Fixed 3:1 Risk-Reward</strong>Target is always 3× the stop loss distance for consistent expectancy</span></li>
+                    <li><span class="check">✓</span><span><strong>One Trade Per Day Maximum</strong>After the first setup triggers, no further trades are taken that session</span></li>
+                    <li><span class="check">✓</span><span><strong>Visual Range Indicators</strong>Range high and low plotted clearly on the chart with background shading</span></li>
+                    <li><span class="check">✓</span><span><strong>Available in Pine Script &amp; MQL5</strong>Run on TradingView or MetaTrader 5 depending on your platform</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Code -->
+        <div class="block fade-in">
+            <div class="block-header">
+                <span class="block-icon">💻</span>
+                <h2>Pine Script Code</h2>
+            </div>
+            <div class="block-body">
+                <div class="code-wrap">
+                    <div class="code-top">
+                        <span>strategy.pine · Pine Script v5</span>
+                        <a href="https://github.com/mehulbagga/trading-strategies/blob/main/XAUUSD-ORB/strategy.pine" target="_blank">View full code on GitHub →</a>
+                    </div>
+                    <pre><span class="c">//@version=5</span>
+<span class="fn">strategy</span>(<span class="str">"XAUUSD Opening Range Breakout"</span>,
+     overlay=<span class="kw">true</span>,
+     default_qty_type=strategy.fixed,
+     default_qty_value=<span class="num">1</span>)
+
+<span class="c">// ── Time references (New York EST) ──────────────────</span>
+ny1803 = <span class="fn">timestamp</span>(<span class="str">"America/New_York"</span>, year, month,
+          dayofmonth, <span class="num">18</span>, <span class="num">3</span>, <span class="num">0</span>)
+ny1818 = <span class="fn">timestamp</span>(<span class="str">"America/New_York"</span>, year, month,
+          dayofmonth, <span class="num">18</span>, <span class="num">18</span>, <span class="num">0</span>)
+
+isRangeBar   = (time >= ny1803 and time < ny1818)
+isAfterRange = (time >= ny1818)
+
+<span class="c">// ── Build opening range ──────────────────────────────</span>
+<span class="kw">var float</span> rangeHigh = na
+<span class="kw">var float</span> rangeLow  = na
+
+<span class="kw">if</span> isRangeBar
+    rangeHigh := na(rangeHigh) ? high : <span class="fn">math.max</span>(rangeHigh, high)
+    rangeLow  := na(rangeLow)  ? low  : <span class="fn">math.min</span>(rangeLow,  low)
+
+<span class="c">// ── Entry logic: breakout above/below range ──────────</span>
+<span class="c">// See full code on GitHub for complete strategy →</span></pre>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="sidebar-card fade-in">
+            <div class="sidebar-header">Strategy Info</div>
+            <div class="sidebar-body">
+                <div class="sidebar-row"><span class="key">Asset</span><span class="val gold">XAUUSD</span></div>
+                <div class="sidebar-row"><span class="key">Full Name</span><span class="val">Gold Spot / USD</span></div>
+                <div class="sidebar-row"><span class="key">Timeframe</span><span class="val">3-Minute</span></div>
+                <div class="sidebar-row"><span class="key">Strategy</span><span class="val">ORB Breakout</span></div>
+                <div class="sidebar-row"><span class="key">Risk-Reward</span><span class="val green">3 : 1</span></div>
+                <div class="sidebar-row"><span class="key">Range Window</span><span class="val">15 minutes</span></div>
+                <div class="sidebar-row"><span class="key">Max Trades</span><span class="val">1 / day</span></div>
+                <div class="sidebar-row"><span class="key">Platform</span><span class="val">TradingView</span></div>
+                <div class="sidebar-row"><span class="key">Also on</span><span class="val">MetaTrader 5</span></div>
+                <div class="sidebar-row"><span class="key">Language</span><span class="val">Pine Script v5</span></div>
+            </div>
+        </div>
+
+        <div class="sidebar-card fade-in">
+            <div class="sidebar-header">Quick Links</div>
+            <div class="sidebar-body">
+                <a href="https://github.com/mehulbagga/trading-strategies/blob/main/XAUUSD-ORB/strategy.pine" target="_blank" class="btn btn-gold">View Pine Script →</a>
+                <a href="https://github.com/mehulbagga/trading-strategies/tree/main/XAUUSD-ORB" target="_blank" class="btn btn-outline">Full Repo Folder</a>
+                <a href="../" class="btn btn-outline">← Back to Portfolio</a>
+            </div>
+        </div>
+
+        <div class="sidebar-card fade-in">
+            <div class="sidebar-header">How to Use</div>
+            <div class="sidebar-body" style="font-size:13px; color: var(--muted); line-height:1.7;">
+                <p style="margin-bottom:10px;">1. Open TradingView and load <strong style="color:var(--text)">XAUUSD</strong> on a <strong style="color:var(--text)">3-minute chart</strong></p>
+                <p style="margin-bottom:10px;">2. Open Pine Script Editor → paste <strong style="color:var(--text)">strategy.pine</strong></p>
+                <p style="margin-bottom:10px;">3. Click <strong style="color:var(--text)">"Add to chart"</strong> — range will highlight automatically</p>
+                <p>4. Strategy fires on the <strong style="color:var(--accent)">first breakout candle</strong> after 18:18 EST</p>
+            </div>
+        </div>
+
+        <div class="disclaimer fade-in">
+            <strong>⚠️ Disclaimer</strong><br>
+            For educational purposes only. Past performance does not guarantee future results. Always do your own research before trading.
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 <a href="../">Mehul Bagga</a> · <a href="mailto:mehulbagga96@gmail.com">mehulbagga96@gmail.com</a></p>
+    <p><a href="https://github.com/mehulbagga/trading-strategies" target="_blank">GitHub</a> · <a href="https://linkedin.com/in/mehulbagga96" target="_blank">LinkedIn</a></p>
+</footer>
+
+<script>
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+                setTimeout(() => e.target.classList.add('visible'), i * 80);
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
 </html>

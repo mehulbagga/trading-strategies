@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NQ 3-Min ORB Fib Entry | Mehul Bagga</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.7; }
+        header { background: #161b22; border-bottom: 1px solid #30363d; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+        header a { color: #58a6ff; text-decoration: none; font-size: 14px; }
+        header a:hover { text-decoration: underline; }
+        .hero { background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border-bottom: 1px solid #30363d; padding: 60px 32px; text-align: center; }
+        .badge { display: inline-block; background: #1f6feb; color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+        .hero h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; }
+        .hero h1 span { color: #58a6ff; }
+        .hero p { color: #8b949e; font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+        .meta-bar { display: flex; justify-content: center; gap: 32px; margin-top: 28px; flex-wrap: wrap; }
+        .meta-item { text-align: center; }
+        .meta-item .label { color: #8b949e; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .meta-item .value { color: #58a6ff; font-weight: 600; font-size: 15px; margin-top: 4px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 48px 32px; }
+        .section { margin-bottom: 48px; }
+        .section h2 { font-size: 1.3rem; font-weight: 600; color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 10px; margin-bottom: 20px; }
+        .section h2 span { margin-right: 8px; }
+        .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .rule-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 24px; }
+        .rule-card.buy { border-top: 3px solid #3fb950; }
+        .rule-card.sell { border-top: 3px solid #f85149; }
+        .rule-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; }
+        .rule-card h3.buy { color: #3fb950; }
+        .rule-card h3.sell { color: #f85149; }
+        .rule-card p { color: #8b949e; font-size: 14px; margin-bottom: 8px; }
+        .rule-card p strong { color: #e6edf3; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .feature { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 18px; display: flex; align-items: flex-start; gap: 12px; }
+        .feature .icon { font-size: 20px; }
+        .feature .text { font-size: 14px; color: #8b949e; }
+        .feature .text strong { display: block; color: #e6edf3; margin-bottom: 2px; }
+        .timing-table { width: 100%; border-collapse: collapse; }
+        .timing-table th { background: #161b22; color: #8b949e; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 12px 16px; text-align: left; border: 1px solid #30363d; }
+        .timing-table td { padding: 12px 16px; border: 1px solid #30363d; font-size: 14px; color: #e6edf3; }
+        .timing-table tr:nth-child(even) td { background: #161b22; }
+        .code-block { background: #161b22; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; }
+        .code-header { background: #21262d; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d; }
+        .code-header span { color: #8b949e; font-size: 13px; }
+        .code-header a { background: #238636; color: #fff; text-decoration: none; padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+        .code-header a:hover { background: #2ea043; }
+        pre { padding: 24px; overflow-x: auto; font-size: 13px; line-height: 1.6; color: #e6edf3; max-height: 400px; overflow-y: auto; }
+        .disclaimer { background: #161b22; border: 1px solid #f0883e44; border-left: 4px solid #f0883e; border-radius: 8px; padding: 20px 24px; color: #8b949e; font-size: 14px; }
+        .disclaimer strong { color: #f0883e; }
+        footer { background: #161b22; border-top: 1px solid #30363d; padding: 24px 32px; text-align: center; color: #8b949e; font-size: 14px; }
+        footer a { color: #58a6ff; text-decoration: none; }
+        @media (max-width: 600px) { .rules-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="../">← Back to Portfolio</a>
+    <a href="https://github.com/mehulbagga/trading-strategies/tree/main/NQ-3MIN-ORB" target="_blank">View on GitHub →</a>
+</header>
+
+<div class="hero">
+    <div class="badge">Pine Script v5 · TradingView</div>
+    <h1>NQ E-mini Futures<br><span>3-Min Opening Range Breakout</span></h1>
+    <p>Captures the first directional move after the NASDAQ open using a Fibonacci pullback entry for optimal fill prices.</p>
+    <div class="meta-bar">
+        <div class="meta-item"><div class="label">Asset</div><div class="value">NQ1! (E-mini)</div></div>
+        <div class="meta-item"><div class="label">Timeframe</div><div class="value">1-Minute</div></div>
+        <div class="meta-item"><div class="label">Risk-Reward</div><div class="value">1 : 1.5R</div></div>
+        <div class="meta-item"><div class="label">Trades/Day</div><div class="value">Max 1</div></div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Timing -->
+    <div class="section">
+        <h2><span>⏰</span>Session Timing</h2>
+        <table class="timing-table">
+            <tr><th>Timezone</th><th>Range Window</th><th>Entry From</th></tr>
+            <tr><td>🇮🇳 IST (UTC+5:30)</td><td>20:00 – 20:03</td><td>20:03 onwards</td></tr>
+            <tr><td>🇺🇸 New York (EST)</td><td>09:30 – 09:33 AM</td><td>09:33 AM onwards</td></tr>
+        </table>
+    </div>
+
+    <!-- Entry Rules -->
+    <div class="section">
+        <h2><span>📐</span>Entry & Exit Rules</h2>
+        <div class="rules-grid">
+            <div class="rule-card buy">
+                <h3 class="buy">▲ BUY Setup</h3>
+                <p><strong>Condition:</strong> 1-min candle closes above the 3-min range high</p>
+                <p><strong>Entry:</strong> High − 0.25 × (High − Low) → Limit order</p>
+                <p><strong>Stop Loss:</strong> Low of the trigger candle</p>
+                <p><strong>Target:</strong> Entry + 1.5 × Stop Range</p>
+            </div>
+            <div class="rule-card sell">
+                <h3 class="sell">▼ SELL Setup</h3>
+                <p><strong>Condition:</strong> 1-min candle closes below the 3-min range low</p>
+                <p><strong>Entry:</strong> Low + 0.25 × (High − Low) → Limit order</p>
+                <p><strong>Stop Loss:</strong> High of the trigger candle</p>
+                <p><strong>Target:</strong> Entry − 1.5 × Stop Range</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="section">
+        <h2><span>🔒</span>Risk Management Features</h2>
+        <div class="features">
+            <div class="feature"><div class="icon">🎯</div><div class="text"><strong>Fib Pullback Entry</strong>Better fills via 0.25 Fib limit order</div></div>
+            <div class="feature"><div class="icon">📅</div><div class="text"><strong>One Trade Per Day</strong>No re-entry after first setup</div></div>
+            <div class="feature"><div class="icon">🛡️</div><div class="text"><strong>Hard Stop Loss</strong>At trigger candle extreme</div></div>
+            <div class="feature"><div class="icon">📊</div><div class="text"><strong>Fixed 1.5R Target</strong>Pre-defined reward-to-risk</div></div>
+            <div class="feature"><div class="icon">🔄</div><div class="text"><strong>Daily Auto Reset</strong>State resets each new day</div></div>
+            <div class="feature"><div class="icon">👁️</div><div class="text"><strong>Visual Indicators</strong>Range, entry, SL & TP on chart</div></div>
+        </div>
+    </div>
+
+    <!-- Code -->
+    <div class="section">
+        <h2><span>💻</span>Pine Script Code</h2>
+        <div class="code-block">
+            <div class="code-header">
+                <span>strategy.pine</span>
+                <a href="https://github.com/mehulbagga/trading-strategies/blob/main/NQ-3MIN-ORB/strategy.pine" target="_blank">View Full Code →</a>
+            </div>
+            <pre><code>//@version=5
+strategy("NQ 3-Min Range Breakout - Fib Entry (IST 20:00)", 
+     overlay=true, margin_long=100, margin_short=100,
+     default_qty_type=strategy.fixed, default_qty_value=1)
+
+// Time Check using IST (Asia/Kolkata)
+chartHour   = hour(time, "Asia/Kolkata")
+chartMinute = minute(time, "Asia/Kolkata")
+
+// Range window: 20:00 to 20:02 IST (3 x 1-min candles)
+isRangeBar   = (chartHour == 20 and chartMinute &lt;= 2)
+isAfterRange = (chartHour == 20 and chartMinute >= 3) or (chartHour > 20)
+
+// ... full logic in GitHub →</code></pre>
+        </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+        <strong>⚠️ Disclaimer:</strong> This strategy is for educational and research purposes only. Past performance does not guarantee future results. Always conduct your own due diligence and consult with a financial professional before trading with real capital.
+    </div>
+
+</div>
+
+<footer>
+    Built by <a href="https://mehulbagga.github.io/trading-strategies/">Mehul Bagga</a> · 
+    <a href="mailto:mehulbagga96@gmail.com">mehulbagga96@gmail.com</a> · 
+    <a href="https://github.com/mehulbagga/trading-strategies" target="_blank">GitHub</a>
+</footer>
+
+</body>
+</html>

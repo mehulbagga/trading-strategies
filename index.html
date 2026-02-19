@@ -94,11 +94,13 @@
         .strategy-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .card-gold::before { background: linear-gradient(90deg, var(--accent-gold), #ff9f43); }
         .card-blue::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+        .card-purple::before { background: linear-gradient(90deg, #a855f7, #6366f1); }
 
         .card-header { padding: 28px 28px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
         .card-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 14px; }
         .icon-gold { background: rgba(240,180,41,0.1); border: 1px solid rgba(240,180,41,0.2); }
         .icon-blue { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.2); }
+        .icon-purple { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); }
         .card-num { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 4px; }
         .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
         .card-subtitle { font-size: 13px; color: var(--muted); }
@@ -108,6 +110,7 @@
         .tag-gold { background: rgba(240,180,41,0.1); color: var(--accent-gold); border: 1px solid rgba(240,180,41,0.2); }
         .tag-blue { background: rgba(0,153,255,0.1); color: var(--accent2); border: 1px solid rgba(0,153,255,0.2); }
         .tag-gray { background: rgba(74,98,120,0.1); color: var(--muted); border: 1px solid var(--border); }
+        .tag-purple { background: rgba(168,85,247,0.1); color: #a855f7; border: 1px solid rgba(168,85,247,0.2); }
 
         .card-body { padding: 24px 28px; }
         .card-body p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
@@ -128,6 +131,8 @@
         .btn-primary:hover { background: #00f0c0; transform: translateX(2px); }
         .btn-gold { background: var(--accent-gold); color: var(--bg); }
         .btn-gold:hover { background: #ffc94d; transform: translateX(2px); }
+        .btn-purple { background: #a855f7; color: #fff; }
+        .btn-purple:hover { background: #c084fc; transform: translateX(2px); }
         .btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
         .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -210,7 +215,7 @@
         <a href="#strategies">Strategies</a>
         <a href="#about">About</a>
         <a href="https://github.com/mehulbagga/trading-strategies" target="_blank">GitHub</a>
-        <a href="mailto:mehulbagga96@gmail.com" class="nav-cta">Contact</a>
+        <a href="/cdn-cgi/l/email-protection#ddb0b8b5a8b1bfbcbababce4eb9dbab0bcb4b1f3beb2b0" class="nav-cta">Contact</a>
     </div>
 </nav>
 
@@ -310,6 +315,43 @@
             </div>
         </div>
 
+        <!-- WCPR EMA Card -->
+        <div class="strategy-card card-purple fade-in">
+            <div class="card-header">
+                <div>
+                    <div class="card-icon icon-purple">📊</div>
+                    <div class="card-title">Weekly CPR + EMA Trend Strategy</div>
+                    <div class="card-subtitle">Forex Majors &amp; Crosses · 1H / 4H Chart</div>
+                    <div class="card-tags">
+                        <span class="tag tag-purple">Trend Following</span>
+                        <span class="tag tag-green">Multi-TF</span>
+                        <span class="tag tag-blue">Pine Script</span>
+                        <span class="tag tag-gray">Weekly CPR</span>
+                    </div>
+                </div>
+                <div class="card-num">#03</div>
+            </div>
+            <div class="card-body">
+                <p>Combines Weekly Central Pivot Range with a triple EMA stack (21/50/200) to catch high-probability trend continuation moves across major and cross FX pairs.</p>
+                <div class="card-metrics">
+                    <div class="metric"><div class="metric-val">2:1+</div><div class="metric-key">Risk-Reward</div></div>
+                    <div class="metric"><div class="metric-val">1H/4H</div><div class="metric-key">Timeframe</div></div>
+                    <div class="metric"><div class="metric-val">3</div><div class="metric-key">Confirmations</div></div>
+                </div>
+                <ul class="card-features">
+                    <li>Weekly CPR auto-calculated from prev week OHLC</li>
+                    <li>Triple EMA stack: 21 / 50 / 200</li>
+                    <li>ATR-based dynamic SL &amp; TP + trailing stop</li>
+                    <li>London &amp; New York session filter</li>
+                    <li>Live info table + built-in alerts</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <span class="platform">TradingView (Pine Script v5)</span>
+                <a href="./WCPR-EMA/" class="btn btn-purple">View Details →</a>
+            </div>
+        </div>
+
         <!-- Coming Soon -->
         <div class="coming-card fade-in">
             <div class="coming-icon">🔬</div>
@@ -317,7 +359,6 @@
             <ul class="coming-list">
                 <li>Mean Reversion Systems</li>
                 <li>Multi-Timeframe Analysis</li>
-                <li>Trend Following Models</li>
                 <li>Machine Learning Integration</li>
             </ul>
         </div>
@@ -335,7 +376,7 @@
             <div class="contact-links">
                 <a href="https://github.com/mehulbagga/trading-strategies" target="_blank" class="btn btn-outline">GitHub Repo</a>
                 <a href="https://linkedin.com/in/mehulbagga96" target="_blank" class="btn btn-outline">LinkedIn</a>
-                <a href="mailto:mehulbagga96@gmail.com" class="btn btn-primary">Get in Touch</a>
+                <a href="/cdn-cgi/l/email-protection#1f727a776a737d7e78787e26295f78727e7673317c7072" class="btn btn-primary">Get in Touch</a>
             </div>
         </div>
         <div class="tech-grid fade-in">
@@ -351,23 +392,12 @@
 
 <!-- FOOTER -->
 <footer>
-    <p>&#169; 2026 Mehul Bagga &middot; <a href="mailto:mehulbagga96@gmail.com">mehulbagga96@gmail.com</a></p>
+    <p>&#169; 2026 Mehul Bagga &middot; <a href="/cdn-cgi/l/email-protection#3b565e534e57595a5c5c5a020d7b5c565a525715585456"><span class="__cf_email__" data-cfemail="91fcf4f9e4fdf3f0f6f6f0a8a7d1f6fcf0f8fdbff2fefc">[email&#160;protected]</span></a></p>
     <p>For educational purposes only &middot; <a href="https://github.com/mehulbagga/trading-strategies/blob/main/LICENSE" target="_blank">MIT License</a></p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Activate animations only when JS is ready — content always visible without JS
     document.documentElement.classList.add('js-ready');
     const observer = new IntersectionObserver(entries => {
-        entries.forEach((e, i) => {
-            if (e.isIntersecting) {
-                setTimeout(() => e.target.classList.add('visible'), i * 100);
-                observer.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.05 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-</script>
-
-</body>
-</html>
+        entries.fo

@@ -48,6 +48,13 @@
         .code-header a:hover { background: #2ea043; }
         pre { padding: 24px; overflow-x: auto; font-size: 13px; line-height: 1.6; color: #e6edf3; max-height: 400px; overflow-y: auto; }
         .disclaimer { background: #161b22; border: 1px solid #f0883e44; border-left: 4px solid #f0883e; border-radius: 8px; padding: 20px 24px; color: #8b949e; font-size: 14px; }
+        .locked-code { background: linear-gradient(135deg, #0d1f3c 0%, #0a1628 100%); border: 1px solid #1f6feb55; border-radius: 12px; padding: 56px 32px; text-align: center; }
+        .locked-icon { font-size: 48px; margin-bottom: 16px; }
+        .locked-title { font-size: 1.4rem; font-weight: 700; color: #e6edf3; margin-bottom: 6px; }
+        .locked-sub { font-family: monospace; font-size: 12px; color: #58a6ff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+        .locked-desc { color: #8b949e; font-size: 14px; max-width: 420px; margin: 0 auto 28px; line-height: 1.7; }
+        .locked-btn { display: inline-flex; align-items: center; gap: 8px; background: #1f6feb; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+        .locked-btn:hover { background: #388bfd; }
         .disclaimer strong { color: #f0883e; }
         footer { background: #161b22; border-top: 1px solid #30363d; padding: 24px 32px; text-align: center; color: #8b949e; font-size: 14px; }
         footer a { color: #58a6ff; text-decoration: none; }
@@ -122,25 +129,12 @@
     <!-- Code -->
     <div class="section">
         <h2><span>💻</span>Pine Script Code</h2>
-        <div class="code-block">
-            <div class="code-header">
-                <span>strategy.pine</span>
-                <a href="https://github.com/mehulbagga/trading-strategies/blob/main/NQ-3MIN-ORB/strategy.pine" target="_blank">View Full Code →</a>
-            </div>
-            <pre><code>//@version=5
-strategy("NQ 3-Min Range Breakout - Fib Entry (IST 20:00)", 
-     overlay=true, margin_long=100, margin_short=100,
-     default_qty_type=strategy.fixed, default_qty_value=1)
-
-// Time Check using IST (Asia/Kolkata)
-chartHour   = hour(time, "Asia/Kolkata")
-chartMinute = minute(time, "Asia/Kolkata")
-
-// Range window: 20:00 to 20:02 IST (3 x 1-min candles)
-isRangeBar   = (chartHour == 20 and chartMinute &lt;= 2)
-isAfterRange = (chartHour == 20 and chartMinute >= 3) or (chartHour > 20)
-
-// ... full logic in GitHub →</code></pre>
+        <div class="locked-code">
+            <div class="locked-icon">🔒</div>
+            <div class="locked-title">Source Code Protected</div>
+            <div class="locked-sub">strategy.pine · Pine Script v5</div>
+            <p class="locked-desc">This strategy's source code is private. Send a request and I'll review and respond personally.</p>
+            <a href="mailto:mehulbagga96@gmail.com?subject=Request Access: NQ 3-Min ORB Pine Script&body=Hi Mehul, I would like to request access to the NQ 3-Min Opening Range Breakout Pine Script strategy." class="locked-btn">✉ Request Access</a>
         </div>
     </div>
 
@@ -153,9 +147,4 @@ isAfterRange = (chartHour == 20 and chartMinute >= 3) or (chartHour > 20)
 
 <footer>
     Built by <a href="https://mehulbagga.github.io/trading-strategies/">Mehul Bagga</a> · 
-    <a href="mailto:mehulbagga96@gmail.com">mehulbagga96@gmail.com</a> · 
-    <a href="https://github.com/mehulbagga/trading-strategies" target="_blank">GitHub</a>
-</footer>
-
-</body>
-</html>
+    <a href="/cdn-cgi/l/email-protection#600d0508150c0201070701595620070d01090c4e030f0d"><span cla

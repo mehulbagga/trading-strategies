@@ -234,6 +234,13 @@
 
         /* Code block */
         .code-wrap { background: var(--surface2); border-radius: 8px; overflow: hidden; }
+        .locked-card { background: linear-gradient(135deg, #0a1628 0%, #0d1f3c 100%); border: 1px solid rgba(0,153,255,0.2); border-radius: 10px; padding: 56px 32px; text-align: center; }
+        .locked-icon-big { font-size: 48px; margin-bottom: 16px; }
+        .locked-title { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .locked-file { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+        .locked-desc { color: var(--muted); font-size: 13px; max-width: 380px; margin: 0 auto 28px; line-height: 1.7; }
+        .locked-request-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent2); color: var(--bg); text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 13px; font-weight: 700; font-family: var(--sans); transition: all 0.2s; }
+        .locked-request-btn:hover { background: #0099ff; color: #fff; transform: translateY(-1px); }
         .code-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--border); }
         .code-top span { font-family: var(--mono); font-size: 11px; color: var(--muted); }
         .code-top a { font-size: 12px; color: var(--accent); text-decoration: none; font-family: var(--mono); }
@@ -328,8 +335,9 @@
         footer a { color: var(--accent); text-decoration: none; }
 
         /* Animations */
-        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
-        .fade-in.visible { opacity: 1; transform: none; }
+        .fade-in { opacity: 1; transform: none; transition: opacity 0.5s ease, transform 0.5s ease; }
+        .fade-in.animate { opacity: 0; transform: translateY(20px); }
+        .fade-in.animate.visible { opacity: 1; transform: none; }
 
         @media (max-width: 768px) {
             nav { padding: 0 20px; }
@@ -350,7 +358,7 @@
     <div class="nav-links">
         <a href="../" class="nav-back">← Portfolio</a>
         <a href="https://github.com/mehulbagga/trading-strategies/tree/main/XAUUSD-ORB" target="_blank">GitHub</a>
-        <a href="mailto:mehulbagga96@gmail.com">Contact</a>
+        <a href="javascript:void(0)" onclick="window.location=atob('bWFpbHRvOm1laHVsYmFnZ2E5NkBnbWFpbC5jb20=')">Contact</a>
     </div>
 </nav>
 
@@ -503,36 +511,12 @@
                 <h2>Pine Script Code</h2>
             </div>
             <div class="block-body">
-                <div class="code-wrap">
-                    <div class="code-top">
-                        <span>strategy.pine · Pine Script v5</span>
-                        <a href="https://github.com/mehulbagga/trading-strategies/blob/main/XAUUSD-ORB/strategy.pine" target="_blank">View full code on GitHub →</a>
-                    </div>
-                    <pre><span class="c">//@version=5</span>
-<span class="fn">strategy</span>(<span class="str">"XAUUSD Opening Range Breakout"</span>,
-     overlay=<span class="kw">true</span>,
-     default_qty_type=strategy.fixed,
-     default_qty_value=<span class="num">1</span>)
-
-<span class="c">// ── Time references (New York EST) ──────────────────</span>
-ny1803 = <span class="fn">timestamp</span>(<span class="str">"America/New_York"</span>, year, month,
-          dayofmonth, <span class="num">18</span>, <span class="num">3</span>, <span class="num">0</span>)
-ny1818 = <span class="fn">timestamp</span>(<span class="str">"America/New_York"</span>, year, month,
-          dayofmonth, <span class="num">18</span>, <span class="num">18</span>, <span class="num">0</span>)
-
-isRangeBar   = (time >= ny1803 and time < ny1818)
-isAfterRange = (time >= ny1818)
-
-<span class="c">// ── Build opening range ──────────────────────────────</span>
-<span class="kw">var float</span> rangeHigh = na
-<span class="kw">var float</span> rangeLow  = na
-
-<span class="kw">if</span> isRangeBar
-    rangeHigh := na(rangeHigh) ? high : <span class="fn">math.max</span>(rangeHigh, high)
-    rangeLow  := na(rangeLow)  ? low  : <span class="fn">math.min</span>(rangeLow,  low)
-
-<span class="c">// ── Entry logic: breakout above/below range ──────────</span>
-<span class="c">// See full code on GitHub for complete strategy →</span></pre>
+                <div class="locked-card">
+                    <div class="locked-icon-big">🔒</div>
+                    <div class="locked-title">Source Code Protected</div>
+                    <div class="locked-file">strategy.pine · Pine Script v5</div>
+                    <p class="locked-desc">This strategy's source code is private. Send a request and I'll review and respond personally.</p>
+                    <a href="javascript:void(0)" onclick="window.location=atob('bWFpbHRvOm1laHVsYmFnZ2E5NkBnbWFpbC5jb20/c3ViamVjdD1SZXF1ZXN0JTIwQWNjZXNzJTNBJTIwWEFVVVNEJTIwT1JCJTIwUGluZSUyMFNjcmlwdA==');" class="locked-request-btn">✉ Request Access</a>
                 </div>
             </div>
         </div>
@@ -561,8 +545,8 @@ isAfterRange = (time >= ny1818)
         <div class="sidebar-card fade-in">
             <div class="sidebar-header">Quick Links</div>
             <div class="sidebar-body">
-                <a href="https://github.com/mehulbagga/trading-strategies/blob/main/XAUUSD-ORB/strategy.pine" target="_blank" class="btn btn-gold">View Pine Script →</a>
-                <a href="https://github.com/mehulbagga/trading-strategies/tree/main/XAUUSD-ORB" target="_blank" class="btn btn-outline">Full Repo Folder</a>
+                <a href="javascript:void(0)" onclick="window.location=atob('bWFpbHRvOm1laHVsYmFnZ2E5NkBnbWFpbC5jb20/c3ViamVjdD1SZXF1ZXN0JTIwQWNjZXNzJTNBJTIwWEFVVVNEJTIwT1JCJTIwUGluZSUyMFNjcmlwdA==');" class="btn btn-gold">Request Access →</a>
+                <a href="https://github.com/mehulbagga/trading-strategies/tree/main/XAUUSD-ORB" target="_blank" class="btn btn-outline">View on GitHub</a>
                 <a href="../" class="btn btn-outline">← Back to Portfolio</a>
             </div>
         </div>
@@ -587,21 +571,9 @@ isAfterRange = (time >= ny1818)
 
 <!-- FOOTER -->
 <footer>
-    <p>© 2026 <a href="../">Mehul Bagga</a> · <a href="mailto:mehulbagga96@gmail.com">mehulbagga96@gmail.com</a></p>
-    <p><a href="https://github.com/mehulbagga/trading-strategies" target="_blank">GitHub</a> · <a href="https://linkedin.com/in/mehulbagga96" target="_blank">LinkedIn</a></p>
+    <p>© 2026 <a href="../">Mehul Bagga</a> · <a href="javascript:void(0)" onclick="window.location=atob('bWFpbHRvOm1laHVsYmFnZ2E5NkBnbWFpbC5jb20=')">mehulbagga96@gmail.com</a></p>
+    <p><a href="../">← Back to Portfolio</a></p>
 </footer>
-
-<script>
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach((e, i) => {
-            if (e.isIntersecting) {
-                setTimeout(() => e.target.classList.add('visible'), i * 80);
-                observer.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-</script>
 
 </body>
 </html>
